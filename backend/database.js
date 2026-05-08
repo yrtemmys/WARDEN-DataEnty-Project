@@ -62,15 +62,18 @@ data["Abilities"].forEach((ability)=>{
 	db.run(statement)
 	ability["feats"].forEach((feat)=>{
 		statement = `
-			insert into abilities(parent_id, title, actions, description, strain)
+			insert into abilities(parent_id, title, actions, description, strain, alteration_id, path_id)
 			values(
 				(select ability_id from abilities where title="`+ability["title"]+`" limit 1),
 				"`+feat["title"]+`",
 				"`+feat["actions"]+`",
 				"`+feat["description"]+`",
-				"`+feat["strain"]+`"
+				"`+feat["strain"]+`",
+				(select alteration_id from alterations where title="`+ability["alteration"]+`" limit 1),
+				(select path_id from paths where title="`+ability["path"]+`" limit 1)
 			);
 		`
+		console.log(statement)
 		db.run(statement)
 	})
 	//console.log(db.exec('select count(*) from abilities')[0]["values"])
