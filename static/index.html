@@ -78,6 +78,10 @@
 				border-color: #668822;
 				padding: 1%;
 			}
+			.grid{
+				display:grid;
+				grid-template-columns: auto auto auto;
+			}
 		</style>
 	</head>
 	<body>
@@ -90,12 +94,13 @@
 			<input type='button' id='export_character' value='Export Character'/>
 			<input type='file' id='import_character' value='Import Character'/>
 			<input type='button' class='toggle_popup' value='Controls'/>
+			<div class='character_list'></div>
 		</div>
 		<div class="flex_container header">
 			<h1>real warden site</h1>
-			<input id="character_name" type='text' value='Joe Hendriks'/>
-			<div id="character_level">1</div>
-			<div id="character_advance_points">1</div>
+			<input type='text'   id="character_name" class='updater' value='John Smith'/>
+			<input type='number' id="character_level" class='updater' value='0'/>
+			<input type='number' id="character_advance_points" class='updater' value=0/>
 			<input type='button' class='toggle_popup' value='Controls'/>
 		</div>
 		<div class="flex_container">
@@ -113,11 +118,18 @@
 			<div class="flex_element vertical_divider"></div>
 			<div class="flex_element" id="detail_view">
 				<h3>Saved</h3>
-				<div id='char_meta'></div>
-				<div id='char_resources'></div>
-				<div id='char_ranks'></div>
-				<div id='char_origins'></div>
-				<div id='char_skills'></div>
+				<div class='grid'>
+					<div id='char_meta'></div>
+					<div id='char_origins'></div>
+				</div>
+				<hr>
+				<div class='grid'>
+					<div id='char_resources'></div>
+					<div id='char_skills'></div>
+				</div>
+				<hr>
+				<div class="grid" id='char_ranks'></div>
+				<hr>
 				<div id='char_abilities'></div>
 			</div>
 		</div>

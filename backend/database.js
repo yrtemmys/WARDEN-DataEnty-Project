@@ -53,8 +53,7 @@ create table character(
 	name varchar(50),
 	advance_points integer,
 	goals longtext,
-	level integer,
-	wealth integer
+	level integer
 );
 
 create table character_has_ability(
@@ -215,6 +214,8 @@ create view character_sheet_grouped as
 	insert into resources(title, short_name) values ("Hit Points", "HP");
 	insert into resources(title, short_name) values ("Strain", "SP");
 	insert into resources(title, short_name) values ("Speed", "m");
+	insert into resources(title, short_name) values ("Wealth", "W");
+	insert into resources(title, short_name) values ("Fate Points", "FP");
 	insert into paths(title) values("Toughness");
 	insert into paths(title) values("Resolve");
 	insert into paths(title) values("Perception");
@@ -229,11 +230,13 @@ create view character_sheet_grouped as
 	insert into skills(title) values("Diplomacy");
 	insert into skills(title) values("Force");
 
-	insert into character(name, advance_points, goals, level, wealth)
-		values("Jimmy Bob", 0, "Get Rich; Kill puppies", 1, 3);
+	insert into character(name, advance_points, goals, level)
+		values("Jimmy Bob", 0, "Get Rich; Kill puppies", 1);
 	insert into character_has_resource values(1,1,10);
 	insert into character_has_resource values(1,2,10);
 	insert into character_has_resource values(1,3,5);
+	insert into character_has_resource values(1,4,3);
+	insert into character_has_resource values(1,5,1);
 
 	insert into character_has_rank values (1,1,3);
 	insert into character_has_rank values (1,2,1);

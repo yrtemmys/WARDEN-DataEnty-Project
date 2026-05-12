@@ -58,7 +58,7 @@ export async function select_character(req, res){
 	let exists = (1==db.exec(`select count(*) from character where character_id=`+id)[0].values[0][0])
 	
 	if(!exists){
-		db.run(`insert into character values(`+id+`, '', 0,'',0,0)`)
+		db.run(`insert into character values(`+id+`, '', 0,'',0)`)
 	}
 	result.meta = db.exec(`select * from character ch where ch.character_id=`+id)[0]
 	result.abilities = db.exec(`select title from character_has_ability cha join abilities a on cha.ability_id = a.ability_id where character_id=`+id)[0]
@@ -101,6 +101,7 @@ export async function save_character(req, res){
 	let meta = character.meta
 	let id = meta.character_id
 
+
 	//meta	
 	let exists = (1==db.exec(`select count(*) from character where character_id=`+id)[0].values[0][0])
 	let sql
@@ -110,8 +111,7 @@ export async function save_character(req, res){
 		set 	name="`+meta.name+`", 
 			advance_points=`+meta.advance_points+`,
 			goals="`+meta.goals+`",
-			level=`+meta.level+`,
-			wealth=`+meta.wealth+`
+			level=`+meta.level+`
 		where character_id=`+id+`
 	`
 	}else{
@@ -121,8 +121,7 @@ export async function save_character(req, res){
 			"`+meta.name+`",
 			`+meta.advance_points+`,
 			"`+meta.goals+`",
-			`+meta.level+`,
-			`+meta.wealth+`
+			`+meta.level+`
 		)
 		`
 	}

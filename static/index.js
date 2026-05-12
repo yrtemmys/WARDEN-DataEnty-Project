@@ -4,7 +4,7 @@ let i_title = document.getElementById("i_title").value
 //let i_path = document.getElementById("i_path").value
 let s_alteration = document.getElementById("s_alteration")
 let s_path = document.getElementById("s_path")
-let detail_view = document.getElementById("detail_view")
+let detail_view = document.getElementById("char_abilities")
 
 
 const port = 8081
@@ -52,8 +52,7 @@ async function get_character(){
 
 	character = document.character
 	
-	character_from_doc_to_page()
-
+	calc_doc()
 }
 
 function write_character_to_doc(){
@@ -64,8 +63,8 @@ function write_character_to_doc(){
 	let character = document.character
 	let meta = character.meta
 	meta.name = char_name.value
-	meta.level = char_level.innerHTML
-	meta.advance_points = char_advance_points.innerHTML
+	meta.level = char_level.value
+	meta.advance_points = char_advance_points.value
 	
 }
 
@@ -220,12 +219,12 @@ async function import_character(){
 		imported_character.meta.character_id = id
 
 		document.character=imported_character
-		character_from_doc_to_page()
+		calc_doc()
 	})
 	fileReader.readAsText(this.files[0])
 }
 
-function character_from_doc_to_page(){
+function doc_to_page(){
 	let c = document.character
 
 	let char_name = document.getElementById("character_name")
@@ -236,11 +235,75 @@ function character_from_doc_to_page(){
 	char_level.innerHTML=c.meta.level
 	char_advance_points.innerHTML=c.meta.advance_points
 
+	let meta = document.getElementById('char_meta')
+	meta.innerHTML=''
+	for(let m in c.meta){
+		let v = c.meta[m]
+		meta.innerHTML += `<div class='meta'><b>`+m+`: </b>`+v+`</div>`
+	}
+	
+	let resources = document.getElementById('char_resources')
+	resources.innerHTML=''
+	for(let r in c.resources){
+		let v = c.resources[r]
+		resources.innerHTML+=`<div class='resource'><b>`+r+`: </b>`+v+`</div>`
+	}
+
+	let origins = document.getElementById('char_origins')
+	origins.innerHTML=''
+	for(let o in c.origin){
+		o=c.origin[o].title
+		origins.innerHTML += `<div class='origin'><b>Origin: </b>`+o+`</div>`
+	}
+
+	let ranks = document.getElementById('char_ranks')
+	ranks.innerHTML=''
+	for(let r in c.ranks){
+		let v = c.ranks[r]
+		ranks.innerHTML += `<div class='rank'><b>`+r+`: </b>`+v+`</div>`
+}
+
+	let skills = document.getElementById('char_skills')
+	skills.innerHTML=''
+	for(let s in c.skill){
+		let v = c.skill[s]
+		skills.innerHTML += `<div class='skill'><b>`+s+`: </b>`+v+`</div>`
+	}
+
 	load_abilities_from_doc(c.abilities, detail_view)
 
 }
+function calc_doc(){
+	let c = document.character
 
-(()=>{
+	// Advance Points
+	c.meta.advance_points = c.meta.level * 2
+
+	//Hit Points
+	c.resources['Hit Points'] = 10 + c.ranks['Toughness']
+	//Strain
+	c.resources['Strain'] = 10 + c.ranks['Resolve']
+	
+	//Skills
+	for(let s in c.skill){
+		c.skill[s] = c.ranks['Skill']
+	}
+
+	doc_to_page()
+}
+
+//(()=>{
+	let updater = document.getElementsByClassName('updater')
+	for(let i of Array(updater.length).keys()){
+		updater.item(i).addEventListener('change',()=>{
+			console.log("hi")
+			write_character_to_doc()
+			calc_doc()
+		})
+	}
+//})()
+
+//(()=>{
 	let btns = document.getElementsByClassName('toggle_popup')
 	for(let i of Array(btns.length).keys()){
 		btns.item(i).addEventListener('click', ()=>{
@@ -248,7 +311,7 @@ function character_from_doc_to_page(){
 			c.classList.toggle('hidden')
 		})
 	}
-})()
+//})()
 	
 
 
